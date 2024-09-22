@@ -1,0 +1,11 @@
+.git/
+.gitignore
+.vscode/
+*.log
+*.pid
+*.tmp
+*.swp
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
