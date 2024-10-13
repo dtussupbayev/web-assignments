@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li.completed {
+            background-color: #e0ffe0;
+        }
+        .to-do-text {
+            flex-grow: 1;
+            margin-right: 15px;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .actions button {
+            background-color: #f44336;
+            padding: 10px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .actions button.complete {
+            background-color: #008CBA;
+        }
+        .actions button:hover {
+            opacity: 0.85;
+        }
+        form {
+            display: flex;
+            justify-content: space-between;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>To-Do List</h1>
+    <form method="post" action="{% url 'add_to_do_item' %}">
+        {% csrf_token %}
+        <input type="text" name="text" placeholder="Add a new item">
+        <button type="submit">Add</button>
+    </form>
+    <ul>
+        {% for item in items %}
+        <li class="{% if item.completed %}completed{% endif %}">
+            <span class="to-do-text">{{ item.text }}</span>
+            <div class="actions">
+                <form method="post" action="{% url 'toggle_to_do_completed' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="complete">
+                        {% if item.completed %} Mark as InComplete {% else %} Mark as Complete {% endif %}
+                    </button>
+                </form>
+                <form method="post" action="{% url 'delete_to_do_item' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
+{% comment %} 
+<h1>My To-Do List</h1>
+
+<form method="post" action="{% url 'add_todo_item' %}">
+    {% csrf_token %}
+    <input type="text" name="text" placeholder="Add a new item">
+    <button type="submit">Add</button>
+</form>
+
+<ul>
+    {% for item in items %}
+        <li>
+            {{ item.text }}
+            {% if item.completed %}
+                (Completed)
+            {% endif %}
+            <form method="post" action="{% url 'toggle_todo_complete' item.id %}">
+                {% csrf_token %}
+                <button type="submit">
+                    {% if item.completed %}
+                        Mark as Incomplete
+                    {% else %}
+                        Mark as Complete
+                    {% endif %}
+                </button>
+            </form>
+            <form method="post" action="{% url 'delete_todo_item' item.id %}">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul> {% endcomment %}
